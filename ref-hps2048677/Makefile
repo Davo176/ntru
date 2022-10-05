@@ -33,6 +33,13 @@ HDR = cmov.h \
 SRC_URAND = $(SRC) randombytes.c
 HDR_URAND = $(HDR) randombytes.h
 
+SRC_KAT = $(SRC) ../knownanswertest/rng.c ../knownanswertest/PQCgenKAT_kem.c
+HDR_KAT = $(HDR) ../knownanswertest/rng.h api.h
+
+RANDOMSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/additionalRandomTesting.c
+ENCAPSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/additionalEncapTesting.c
+DECAPSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/additionalDecapTesting.c
+
 all: test/decap \
      test/encap \
      test/keypair \
@@ -41,6 +48,19 @@ all: test/decap \
      test/test_ntru \
      test/test_owcpa \
      test/test_pack
+
+PQCgenKAT_kem: $(SRC_KAT) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(SRC_KAT) -I. -lcrypto $(LDFLAGS)
+
+additionalRandomTesting: $(RANDOMSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(RANDOMSOURCES) -I. -lcrypto $(LDFLAGS)
+
+additionalEncapTesting: $(ENCAPSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(ENCAPSOURCES) -I. -lcrypto $(LDFLAGS)
+
+additionalDecapTesting: $(DECAPSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(DECAPSOURCES) -I. -lcrypto $(LDFLAGS)
+
 
 test/test_gp_compat: $(SRC_URAND) $(HDR_URAND) test/test_gp_compat.c
 	$(CC) $(CFLAGS) -o $@ $(SRC_URAND) test/test_gp_compat.c
