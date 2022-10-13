@@ -61,6 +61,17 @@ additionalEncapTesting: $(ENCAPSOURCES) $(HDR_KAT)
 additionalDecapTesting: $(DECAPSOURCES) $(HDR_KAT)
 	$(CC) $(CFLAGS) -o $@ $(DECAPSOURCES) -I. -lcrypto $(LDFLAGS)
 
+CREATEKPSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/createKeyPairs.c
+createKeyPairs: $(CREATEKPSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(CREATEKPSOURCES) -I. -lcrypto $(LDFLAGS)
+
+CREATEENCAPSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/createEncapsulation.c
+createEncaps: $(CREATEENCAPSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(CREATEENCAPSOURCES) -I. -lcrypto $(LDFLAGS)
+
+CHECKDECAPSOURCES = $(SRC) ../knownanswertest/rng.c ../knownanswertest/checkDecapsulation.c
+checkDecaps: $(CHECKDECAPSOURCES) $(HDR_KAT)
+	$(CC) $(CFLAGS) -o $@ $(CHECKDECAPSOURCES) -I. -lcrypto $(LDFLAGS)
 
 test/test_gp_compat: $(SRC_URAND) $(HDR_URAND) test/test_gp_compat.c
 	$(CC) $(CFLAGS) -o $@ $(SRC_URAND) test/test_gp_compat.c
